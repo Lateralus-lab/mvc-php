@@ -24,7 +24,12 @@ class Application
       $this->initController();
       $this->initAction();
 
-      $this->controller->{$this->actionName}();
+      $view = new View();
+      $this->controller->setView($view);
+
+      $content = $this->controller->{$this->actionName}();
+
+      echo $content;
     } catch (RedirectException $e) {
       header('Location: ' . $e->getUrl());
       die;
