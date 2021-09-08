@@ -42,9 +42,9 @@ class Application
   private function addRoutes()
   {
     /** @uses \App\Controller\User::loginAction() */
-    $this->route->addRoute('/user/login', User::class, 'login');
+    $this->route->addRoute('/', User::class, 'login');
     /** @uses \App\Controller\User::registerAction() */
-    $this->route->addRoute('/user/register', User::class, 'register');
+    $this->route->addRoute('/register', User::class, 'register');
     /** @uses \App\Controller\Blog::indexAction() */
     $this->route->addRoute('/blog', Blog::class, 'index');
     $this->route->addRoute('/blog/index', Blog::class, 'index');
@@ -64,6 +64,7 @@ class Application
   private function initAction()
   {
     $actionName = $this->route->getActionName();
+
     if (!method_exists($this->controller, $actionName)) {
       throw new RouteException('Action' . $actionName . ' not found in ' . get_class($this->controller));
     }

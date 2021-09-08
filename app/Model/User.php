@@ -2,7 +2,9 @@
 
 namespace App\Model;
 
-class User
+use Base\AbstractModel;
+
+class User extends AbstractModel
 {
   public function getName()
   {
