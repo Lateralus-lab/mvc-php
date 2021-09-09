@@ -28,7 +28,7 @@ class View
         }
 
         ob_start();
-        include $this->templatePath . DIRECTORY_SEPARATOR . $tpl;
+        include getcwd() . '../../app/View/' . $tpl;
         $data = ob_get_clean();
         return $data;
     }
