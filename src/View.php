@@ -4,24 +4,32 @@ namespace Base;
 
 class View
 {
-  private $templatePath = '';
-  private $data = [];
+    private $templatePath;
+    private $data;
 
-  public function __construct()
-  {
-    $this->templatePath = PROJECT_ROOT_DIR . DIRECTORY_SEPARATOR . 'app/View';
-  }
+    public function __construct()
+    {
+    }
 
-  public function render(string $tpl, $data = []): string
-  {
-    $this->data += $data;
-    ob_start();
-    include $this->templatePath . DIRECTORY_SEPARATOR . $tpl;
-    return ob_get_clean();
-  }
+    public function setTemplatePath(string $path)
+    {
+        $this->templatePath = $path;
+    }
 
-  public function __get($varName)
-  {
-    return $this->data[$varName] ?? null;
-  }
+    public function __get($name)
+    {
+        return $this->data[$name];
+    }
+
+    public function render(string $tpl, $data = []): string
+    {
+        foreach ($data as $key => $value) {
+            $this->data[$key] = $value;
+        }
+
+        ob_start();
+        include $this->templatePath . DIRECTORY_SEPARATOR . $tpl;
+        $data = ob_get_clean();
+        return $data;
+    }
 }
