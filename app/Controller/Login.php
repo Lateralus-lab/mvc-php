@@ -12,9 +12,28 @@ class Login extends AbstractController
     return $this->view->render(
       'login.phtml',
       [
-        'title' => 'Registration',
+        'title' => 'Login Page',
+        'user' => $this->getUser(),
       ]
     );
+  }
+
+  public function auth()
+  {
+    $email = (string) $_POST['email'];
+    $password = (string) $_POST['password'];
+
+    $user = User::getByEmail($email);
+
+    if (!$user) {
+      return 'Incorrect email or password';
+    }
+
+    if ($user->getPassword() !== User::getPasswordHash($password)) {
+      return 'Incorrect email or password';
+    }
+
+    $this->session->authUser($user->getId());
   }
 
   public function register()
@@ -28,6 +47,10 @@ class Login extends AbstractController
       return 'All fields are required';
     }
 
+    if (!$email) {
+      return 'Email is required';
+    }
+
     if ($password !== $passwordConfirm) {
       return 'Passwords do not match';
     }
@@ -36,7 +59,14 @@ class Login extends AbstractController
       return 'The password is less than 5 characters';
     }
 
-    $user = new User($name, $email, $password, date('Y-m-d H:i:s'));
+    $userData = [
+      'name' => $name,
+      'email' => $email,
+      'password' => $password,
+      'created_at' => date('Y-m-d H:i:s')
+    ];
+
+    $user = new User($userData);
     $user->save();
 
     return 'You have successfully registered';

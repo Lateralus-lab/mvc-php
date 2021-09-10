@@ -23,6 +23,10 @@ class Application
       $controller = $this->route->getController();
       $action = $this->route->getAction();
       $controller->setView($view);
+
+      $session = new Session();
+      $session->init();
+      $controller->setSession($session);
       $result = $controller->$action();
 
       echo $result;
