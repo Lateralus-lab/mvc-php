@@ -28,7 +28,7 @@ class View
         }
 
         ob_start();
-        include getcwd() . '../../app/View/' . $tpl;
+        include getcwd() . '/../app/View/' . $tpl;
         $data = ob_get_clean();
         return $data;
     }

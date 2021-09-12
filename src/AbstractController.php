@@ -47,4 +47,9 @@ abstract class AbstractController
   {
     $this->session = $session;
   }
+
+  public function redirect(string $url)
+  {
+    throw new RedirectException($url);
+  }
 }

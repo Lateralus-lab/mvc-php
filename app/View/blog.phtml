@@ -1,0 +1,32 @@
+Messages: <br />
+
+<?php
+/** @var $message \App\Model\Message */
+?>
+
+<?php if ($messages = $this->messages) : ?>
+  <?php foreach ($messages as $message) : ?>
+    <div>
+      <?php $author = $message->getAuthor(); ?>
+      <span><?= $message->getCreatedAt() ?></span>
+      <? if ($author): ?>
+      <div><?= htmlspecialchars($author->getName()); ?></div>
+      <? endif; ?>
+      <?= htmlspecialchars(nl2br($message->getText())); ?>
+      <?php $imageName = $message->getImage() ?>
+      <? if ($imageName): ?>
+      <div><img src="/images/<?= $imageName; ?>" </div>
+        <? endif; ?>
+      </div>
+    <?php endforeach; ?>
+  <?php else : ?>
+    No messages
+  <?php endif; ?>
+
+
+  Add new Message
+  <form enctype="multipart/form-data" action="/blog/addMessage" method="post">
+    <textarea style="width: 250px; height: 150px;" type="text" value="" name="text"></textarea><br><br>
+    Upload Image: <input type="file" name="image"><br>
+    <input type="submit" value="Send">
+  </form>

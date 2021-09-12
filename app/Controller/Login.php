@@ -9,6 +9,10 @@ class Login extends AbstractController
 {
   function index()
   {
+    if ($this->getUser()) {
+      $this->redirect('/blog');
+    }
+
     return $this->view->render(
       'login.phtml',
       [
@@ -34,6 +38,8 @@ class Login extends AbstractController
     }
 
     $this->session->authUser($user->getId());
+
+    $this->redirect('/blog');
   }
 
   public function register()

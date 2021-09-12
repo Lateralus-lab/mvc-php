@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Base\AbstractModel;
 use Base\Database;
+use Config;
 
 class User extends AbstractModel
 {
@@ -15,10 +16,10 @@ class User extends AbstractModel
 
   public function __construct(array $data = [])
   {
-    $this->name = $data['name'];
-    $this->email = $data['email'];
-    $this->password = $data['password'];
-    $this->createdAt = $data['created_at'];
+    $this->name = $data['name'] ?? '';
+    $this->email = $data['email'] ?? '';
+    $this->password = $data['password'] ?? '';
+    $this->createdAt = $data['created_at'] ?? '';
   }
 
   public function save()
@@ -59,6 +60,30 @@ class User extends AbstractModel
     return $user;
   }
 
+  public static function getByIds(array $userIds)
+  {
+    $db = Database::getInstance();
+
+    $idsString = implode(',', $userIds);
+
+    $data = $db->fetchAll(
+      "SELECT * fROM users WHERE id IN($idsString)",
+      __METHOD__
+    );
+    if (!$data) {
+      return [];
+    }
+
+    $users = [];
+    foreach ($data as $elem) {
+      $user = new self($elem);
+      $user->id = $elem['id'];
+      $users[$user->id] = $user;
+    }
+
+    return $users;
+  }
+
   public function getById(int $id)
   {
     $db = Database::getInstance();
@@ -73,6 +98,27 @@ class User extends AbstractModel
     $user = new self($data);
     $user->id = $id;
     return $user;
+  }
+
+  public static function getList(int $limit = 10, int $offset = 0): array
+  {
+    $db = Database::getInstance();
+    $data = $db->fetchAll(
+      "SELECT * fROM users LIMIT $limit OFFSET $offset",
+      __METHOD__
+    );
+    if (!$data) {
+      return [];
+    }
+
+    $users = [];
+    foreach ($data as $elem) {
+      $user = new self($elem);
+      $user->id = $elem['id'];
+      $users[] = $user;
+    }
+
+    return $users;
   }
 
   public static function getPasswordHash(string $password)
@@ -102,5 +148,10 @@ class User extends AbstractModel
   public function getPassword()
   {
     return $this->password;
+  }
+
+  public function isAdmin(): bool
+  {
+    return in_array($this->id, Config::ADMIN_IDS);
   }
 }
