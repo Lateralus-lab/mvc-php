@@ -27,6 +27,7 @@ class Application
       $session = new Session();
       $session->init();
       $controller->setSession($session);
+      $controller->preDispatch();
       $result = $controller->$action();
 
       echo $result;

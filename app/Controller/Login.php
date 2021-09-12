@@ -75,6 +75,9 @@ class Login extends AbstractController
     $user = new User($userData);
     $user->save();
 
+    $this->session->authUser($user->getId());
+    $this->redirect('/blog');
+
     return 'You have successfully registered';
   }
 }

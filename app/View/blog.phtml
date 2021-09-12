@@ -2,11 +2,19 @@ Messages: <br />
 
 <?php
 /** @var $message \App\Model\Message */
+/** @var $user \App\Model\User */
+$user = $this->user;
 ?>
 
 <?php if ($messages = $this->messages) : ?>
   <?php foreach ($messages as $message) : ?>
     <div>
+      <?php $userAdmin = $user->isAdmin(); ?>
+      <? if ($userAdmin): ?>
+      <div>
+        <a href="/admin/deleteMessage/?id=<?= $message->getId(); ?>">Delete</a>
+      </div>
+      <? endif; ?>
       <?php $author = $message->getAuthor(); ?>
       <span><?= $message->getCreatedAt() ?></span>
       <? if ($author): ?>

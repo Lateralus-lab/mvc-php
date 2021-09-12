@@ -42,6 +42,13 @@ class Message extends AbstractModel
     return $res;
   }
 
+  public static function deleteMessage(int $messageId)
+  {
+    $db = Database::getInstance();
+    $query = "DELETE FROM messages WHERE id = $messageId";
+    return $db->exec($query, __METHOD__);
+  }
+
   public static function getList(int $limit = 10, int $offset = 0): array
   {
     $db = Database::getInstance();

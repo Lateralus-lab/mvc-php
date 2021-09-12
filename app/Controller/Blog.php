@@ -29,7 +29,7 @@ class Blog extends AbstractController
 
     return $this->view->render('blog.phtml', [
       'messages' => $messages,
-      'users' => $users
+      'user' => $this->getUser()
     ]);
   }
 

@@ -38,6 +38,8 @@ class User extends AbstractModel
       ]
     );
 
+    $this->id = $db->lastInsertId();
+
     return $res;
   }
 
