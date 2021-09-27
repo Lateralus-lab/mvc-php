@@ -11,7 +11,7 @@ class Admin extends AbstractController
   {
     parent::preDispatch();
 
-    if (!$this->getUser() || $this->getUser()->isAdmin()) {
+    if (!$this->getUser() || !$this->getUser()->isAdmin()) {
       $this->redirect('/');
     }
   }
